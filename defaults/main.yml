@@ -1,0 +1,39 @@
+---
+# defaults file for chatid.consul-alerts
+consul_alerts_user: consul-alerts
+consul_alerts_host: localhost
+consul_alerts_port: 9000
+consul_alerts_consul_http_scheme: http
+consul_alerts_consul_host: localhost
+consul_alerts_consul_port: 8500
+consul_alerts_consul_token:
+consul_alerts_datacenter: dc
+consul_alerts_version: 0.3.1
+consul_alerts_archive: consul-alerts-{{ consul_alerts_version }}-linux-amd64.tar
+consul_alerts_download_url: "https://github.com/AcalephStorage/consul-alerts/releases/download/v0.3.1/{{ consul_alerts_archive }}"
+consul_alerts_daemon_service_name: "{{ consul_alerts_user }}"
+consul_alerts_watch_service_name: "{{ consul_alerts_daemon_service_name }}-watch"
+consul_alerts_log_dir: /var/log/{{ consul_alerts_daemon_service_name }}
+consul_alerts_daemon_log_file: "{{ consul_alerts_log_dir }}/service.log"
+consul_alerts_watch_log_file: "{{ consul_alerts_log_dir }}/watch.log"
+
+consul_alerts_threshold: '30'
+
+consul_alerts_email_enabled: false
+consul_alerts_email_cluster_name: Consul Alerts
+consul_alerts_email_url: localhost
+consul_alerts_email_port: '25'
+consul_alerts_email_username:
+consul_alerts_email_password:
+consul_alerts_email_sender_email: alerts@{{ ansible_hostname }}
+consul_alerts_email_sender_alias:
+consul_alerts_email_receivers: []
+consul_alerts_email_template:
+
+consul_alerts_slack_enabled: false
+consul_alerts_slack_cluster_name: Consul Alerts
+consul_alerts_slack_username: consul-alerts
+consul_alerts_slack_channel:
+consul_alerts_slack_url:
+consul_alerts_slack_icon_url:
+consul_alerts_slack_icon_emoji:

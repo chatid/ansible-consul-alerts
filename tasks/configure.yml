@@ -1,0 +1,16 @@
+---
+- name: configure | set threshold value
+  consul_kv:
+    key: consul-alerts/config/checks/change-threshold
+    value: "{{ consul_alerts_threshold }}"
+    host: "{{ consul_alerts_consul_host }}"
+    port: "{{ consul_alerts_consul_port }}"
+  notify:
+    - restart consul-alerts daemon
+    - restart consul-alerts watch
+
+- include: configure_email.yml
+  when: consul_alerts_email_enabled|bool
+
+- include: configure_slack.yml
+  when: consul_alerts_slack_enabled|bool

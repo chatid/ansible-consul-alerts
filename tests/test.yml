@@ -1,0 +1,14 @@
+- hosts: all
+  sudo: yes
+
+  vars:
+    consul_server: yes
+    consul_bootstrap_expect: 1
+    consul_alerts_email_enabled: true
+    consul_alerts_email_receivers: '["wright@chatid.com"]'
+
+  roles:
+    - role: chatid.consul
+      tags: [provisioning]
+    - role: chatid.consul-alerts
+

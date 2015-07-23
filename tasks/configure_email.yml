@@ -1,0 +1,43 @@
+---
+- name: configure | email | install httplib2
+  easy_install: name=httplib2
+
+- name: configure | email | set consul keys
+  consul_kv:
+    key: consul-alerts/config/notifiers/email/{{ item.key }}
+    value: "{{ item.value | string }}"
+    host: "{{ consul_alerts_consul_host }}"
+    port: "{{ consul_alerts_consul_port }}"
+    token: "{{ consul_alerts_consul_token }}"
+    state: "{{ 'present' if item.value else 'absent' }}"
+  with_items:
+    - key: enabled
+      value: "true"
+    - key: cluster-name
+      value: "{{ consul_alerts_email_cluster_name }}"
+    - key: url
+      value: "{{ consul_alerts_email_url }}"
+    - key: port
+      value: "{{ consul_alerts_email_port }}"
+    - key: username
+      value: "{{ consul_alerts_email_username }}"
+    - key: password
+      value: "{{ consul_alerts_email_password }}"
+    - key: sender-email
+      value: "{{ consul_alerts_email_sender_email }}"
+    - key: sender-alias
+      value: "{{ consul_alerts_email_sender_alias }}"
+    - key: receivers
+      value: '{{ consul_alerts_email_receivers }}'
+    - key: template
+      value: "{{ consul_alerts_email_template }}"
+  notify:
+    - restart consul-alerts daemon
+    - restart consul-alerts watch
+
+# - name: configure | email | set receivers value (using uri module because of bug with JSON array string parameters in Ansible)
+#   uri:
+#     url: "{{ consul_alerts_consul_http_scheme }}://{{ consul_alerts_consul_host }}:{{ consul_alerts_consul_port }}/v1/kv/consul-alerts/config/notifiers/email/receivers?token{% if consul_alerts_consul_token %}={{ consul_alerts_consul_token }}{% endif %}"
+#     body: '{{ consul_alerts_email_receivers | to_json }}'
+#     method: PUT
+

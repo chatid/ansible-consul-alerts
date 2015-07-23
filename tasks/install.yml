@@ -1,0 +1,29 @@
+---
+# tasks file for chatid.consul-alerts
+- name: download consul-alerts
+  get_url: url={{ consul_alerts_download_url }} dest=/tmp
+
+- name: unarchive consul-alerts tar
+  unarchive: src=/tmp/{{ consul_alerts_archive }} dest=/bin copy=no
+
+- name: create consul-alerts user
+  user: name={{ consul_alerts_user }} system=yes
+
+- name: create log dir
+  file: >
+    path={{ consul_alerts_log_dir }} state=directory
+    owner={{ consul_alerts_user }} group={{ consul_alerts_user }} mode=755
+
+- name: create upstart configs
+  template: src={{ item.template }} dest=/etc/init/{{ item.name }}.conf
+  with_items:
+    - name: "{{ consul_alerts_daemon_service_name }}"
+      template: consul-alerts.conf
+    - name: "{{ consul_alerts_watch_service_name }}"
+      template: consul-watch.conf
+
+- name: enable services
+  service: name={{ item }} enabled=yes state=started
+  with_items:
+    - "{{ consul_alerts_daemon_service_name }}"
+    - "{{ consul_alerts_watch_service_name }}"

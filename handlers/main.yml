@@ -1,0 +1,7 @@
+---
+# handlers file for chatid.consul-alerts
+- name: restart consul-alerts daemon
+  service: name={{ consul_alerts_daemon_service_name }} state=restarted
+
+- name: restart consul-alerts watch
+  service: name={{ consul_alerts_watch_service_name }} state=restarted

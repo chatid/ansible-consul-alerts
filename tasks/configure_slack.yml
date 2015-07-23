@@ -1,0 +1,29 @@
+---
+- assert: { that: "consul_alerts_slack_channel is defined" }
+- assert: { that: "consul_alerts_slack_url is defined" }
+
+- name: configure | slack | set consul keys
+  consul_kv:
+    key: consul-alerts/config/notifiers/slack/{{ item.key }}
+    value: "{{ item.value }}"
+    host: "{{ consul_alerts_consul_host }}"
+    port: "{{ consul_alerts_consul_port }}"
+    state: "{{ 'present' if item.value else 'absent' }}"
+  with_items:
+    - key: enabled
+      value: "true"
+    - key: cluster-name
+      value: "{{ consul_alerts_slack_cluster_name }}"
+    - key: url
+      value: "{{ consul_alerts_slack_url }}"
+    - key: channel
+      value: "{{ consul_alerts_slack_channel }}"
+    - key: username
+      value: "{{ consul_alerts_slack_username }}"
+    - key: icon-url
+      value: "{{ consul_alerts_slack_icon_url }}"
+    - key: icon-emoji
+      value: "{{ consul_alerts_slack_icon_emoji }}"
+  notify:
+    - restart consul-alerts daemon
+    - restart consul-alerts watch
