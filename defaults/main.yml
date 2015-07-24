@@ -17,6 +17,13 @@ consul_alerts_log_dir: /var/log/{{ consul_alerts_daemon_service_name }}
 consul_alerts_daemon_log_file: "{{ consul_alerts_log_dir }}/service.log"
 consul_alerts_watch_log_file: "{{ consul_alerts_log_dir }}/watch.log"
 
+consul_alerts_respawn_backoff: 1
+consul_alerts_respawn_backoff_factor: 2
+consul_alerts_respawn_backoff_max: 60
+consul_alerts_respawn_email_recipients: []
+consul_alerts_respawn_email_subject: "{{ consul_alerts_daemon_service_name }} respawning"
+consul_alerts_respawn_email_body: "The `{{ consul_alerts_daemon_service_name }}` process is respawning. Backoff time is $SLEEP_TIME seconds"
+
 consul_alerts_threshold: '30'
 
 consul_alerts_email_enabled: false
